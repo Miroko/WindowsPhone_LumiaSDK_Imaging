@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using Windows.Storage.Streams;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Microsoft.Phone.Shell;
 
 
 
@@ -18,6 +19,10 @@ namespace LumiaSDKApp
 {
     public partial class MainPage : PhoneApplicationPage
     {
+
+        private ApplicationBarIconButton selectImageButton;
+        private ApplicationBarIconButton selectEffectButton;
+        private ApplicationBarIconButton saveImageButton;
 
         // FilterEffect instance is used to apply different
         // filters to an image.
@@ -33,22 +38,53 @@ namespace LumiaSDKApp
         {
             InitializeComponent();
 
+            // Init icon button, can't use x:Name in xaml for reference
+            selectImageButton = (ApplicationBarIconButton)ApplicationBar.Buttons[0];
+            selectEffectButton = (ApplicationBarIconButton)ApplicationBar.Buttons[1];
+            saveImageButton = (ApplicationBarIconButton)ApplicationBar.Buttons[2];
+
             // Initialize WriteableBitmaps to render the
             // filtered and original images.
             _cartoonImageBitmap = new WriteableBitmap(1,1);
             _thumbnailImageBitmap = new WriteableBitmap(1,1);
-
-            // Sample code to localize the ApplicationBar
-            //BuildLocalizedApplicationBar();
         }
 
-        private void PickImage_Click(object sender, RoutedEventArgs e)
+        private void SelectImage_Click(object sender, EventArgs e)
         {
-            SaveButton.IsEnabled = false;
+            saveImageButton.IsEnabled = false;
 
             PhotoChooserTask chooser = new PhotoChooserTask();
             chooser.Completed += PickImageCallback;
             chooser.Show();
+        }
+
+        private void SelectEffect_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private async void SaveImage_Click(object sender, EventArgs e)
+        {
+            saveImageButton.IsEnabled = false;
+
+            if (_cartoonEffect == null)
+            {
+                return;
+            }
+
+            var jpegRenderer = new JpegRenderer(_cartoonEffect);
+
+            // Jpeg renderer gives the raw buffer for the filtered image.
+            IBuffer jpegOutput = await jpegRenderer.RenderAsync();
+
+            // Save the image as a jpeg to the saved pictures album.
+            MediaLibrary library = new MediaLibrary();
+            string fileName = string.Format("CartoonImage_{0:G}", DateTime.Now);
+            var picture = library.SavePicture(fileName, jpegOutput.AsStream());
+
+            MessageBox.Show("Image saved!");
+
+            saveImageButton.IsEnabled = true;
         }
 
         private async void PickImageCallback(object sender, PhotoResult e)
@@ -89,47 +125,7 @@ namespace LumiaSDKApp
                 return;
             }
 
-            SaveButton.IsEnabled = true;
+            saveImageButton.IsEnabled = true;
         }
-
-        private async void SaveImage_Click(object sender, RoutedEventArgs e)
-        {
-            SaveButton.IsEnabled = false;
-
-            if (_cartoonEffect == null)
-            {
-                return;
-            }
-            
-            var jpegRenderer = new JpegRenderer(_cartoonEffect);
-
-            // Jpeg renderer gives the raw buffer for the filtered image.
-            IBuffer jpegOutput = await jpegRenderer.RenderAsync();
-
-            // Save the image as a jpeg to the saved pictures album.
-            MediaLibrary library = new MediaLibrary();
-            string fileName = string.Format("CartoonImage_{0:G}", DateTime.Now);
-            var picture = library.SavePicture(fileName, jpegOutput.AsStream());
-
-            MessageBox.Show("Image saved!");
-
-            SaveButton.IsEnabled = true;
-        }
-       
-        // Sample code for building a localized ApplicationBar
-        //private void BuildLocalizedApplicationBar()
-        //{
-        //    // Set the page's ApplicationBar to a new instance of ApplicationBar.
-        //    ApplicationBar = new ApplicationBar();
-
-        //    // Create a new button and set the text value to the localized string from AppResources.
-        //    ApplicationBarIconButton appBarButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.add.rest.png", UriKind.Relative));
-        //    appBarButton.Text = AppResources.AppBarButtonText;
-        //    ApplicationBar.Buttons.Add(appBarButton);
-
-        //    // Create a new menu item with the localized string from AppResources.
-        //    ApplicationBarMenuItem appBarMenuItem = new ApplicationBarMenuItem(AppResources.AppBarMenuItemText);
-        //    ApplicationBar.MenuItems.Add(appBarMenuItem);
-        //}
     }
 }

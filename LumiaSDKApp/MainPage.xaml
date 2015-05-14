@@ -13,23 +13,29 @@
     SupportedOrientations="Portrait" Orientation="Portrait"
     shell:SystemTray.IsVisible="True">
 
-    <!--LayoutRoot is the root grid where all page content is placed.-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Lumia Imaging SDK" Grid.Row="0" Margin="12,12,12,12" Style="{StaticResource PhoneTextNormalStyle}"/>
-
-        <StackPanel Grid.Row="1" Margin="12,12,12,12">
-            <Image x:Name="OriginalImage" Width="180" Height="180" Stretch="Uniform" HorizontalAlignment="Left" VerticalAlignment="Top" />
-            <Image x:Name="CartoonImage" Stretch="Uniform" />            
-        </StackPanel>
         
-        <Button Content="Pick an image" Click="PickImage_Click" HorizontalAlignment="Left" Grid.Row="2" />
-        <Button Content="Save the image" Click="SaveImage_Click" x:Name="SaveButton" HorizontalAlignment="Right" Grid.Row="2" IsEnabled="False" />
+        <TextBlock Text="Lumia Imaging SDK" Grid.Row="0" Margin="12,12,12,12" Style="{StaticResource PhoneTextNormalStyle}"/>
+        
+        <!--Original image and with effect-->
+        <StackPanel Grid.Row="1" Margin="12,12,12,12">
+            <Image x:Name="OriginalImage" Margin="0,0,0,12" Width="180" Height="180" Stretch="Uniform" HorizontalAlignment="Left" VerticalAlignment="Top" />
+            <Image x:Name="CartoonImage" Stretch="Uniform" />
+        </StackPanel>
     </Grid>
-
+    
+    <!--Actions bar-->
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar IsMenuEnabled="True">
+            <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/add.png" IsEnabled="True" Text="Select Image" Click="SelectImage_Click"/>
+            <shell:ApplicationBarIconButton IconUri="/Assets/AppBar1/edit.png" IsEnabled="False" Text="Select Effect" Click="SelectEffect_Click"/>
+            <shell:ApplicationBarIconButton IconUri="/Assets/AppBar2/save.png" IsEnabled="False" Text="Save Image" Click="SaveImage_Click"/>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
+    
 </phone:PhoneApplicationPage>
