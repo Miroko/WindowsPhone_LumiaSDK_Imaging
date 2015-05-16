@@ -10,122 +10,80 @@ using System.Net;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using Windows.Storage.Streams;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Microsoft.Phone.Shell;
-
-
+using System.IO;
+using System.Threading.Tasks;
+using System.Windows.Media;
+using System.Diagnostics;
 
 namespace LumiaSDKApp
 {
     public partial class MainPage : PhoneApplicationPage
     {
-
         private ApplicationBarIconButton selectImageButton;
         private ApplicationBarIconButton selectEffectButton;
         private ApplicationBarIconButton saveImageButton;
 
-        // FilterEffect instance is used to apply different
-        // filters to an image.
-        // Here we will apply Cartoon filter to an image.
-        private FilterEffect _cartoonEffect = null;
-
-        // The following  WriteableBitmap contains 
-        // the filtered and thumbnail images.
-        private WriteableBitmap _cartoonImageBitmap = null;
-        private WriteableBitmap _thumbnailImageBitmap = null;
-              
         public MainPage()
         {
             InitializeComponent();
-
+           
             // Init icon button, can't use x:Name in xaml for reference
             selectImageButton = (ApplicationBarIconButton)ApplicationBar.Buttons[0];
             selectEffectButton = (ApplicationBarIconButton)ApplicationBar.Buttons[1];
             saveImageButton = (ApplicationBarIconButton)ApplicationBar.Buttons[2];
 
-            // Initialize WriteableBitmaps to render the
-            // filtered and original images.
-            _cartoonImageBitmap = new WriteableBitmap(1,1);
-            _thumbnailImageBitmap = new WriteableBitmap(1,1);
+            // Choose image on startup
+            OpenImagePicker();
         }
 
-        private void SelectImage_Click(object sender, EventArgs e)
-        {
-            saveImageButton.IsEnabled = false;
+        private void LoadImage()
+        {           
+            ImageController.INSTANCE.SetCurrentImage(ImageInEdit);
+            ImageController.INSTANCE.UpdateImage();
 
+            selectEffectButton.IsEnabled = true;
+            saveImageButton.IsEnabled = true;
+        }
+
+        private void OpenImagePicker()
+        {
             PhotoChooserTask chooser = new PhotoChooserTask();
-            chooser.Completed += PickImageCallback;
+            chooser.Completed += OnPictureChosen;
             chooser.Show();
         }
 
-        private void SelectEffect_Click(object sender, EventArgs e)
+        private void OnPictureChosen(object sender, PhotoResult e)
         {
-
+            if (e.TaskResult == TaskResult.OK && e.ChosenPhoto != null)
+            {
+                ImageManipulator.INSTANCE.SetSourceStream(e.ChosenPhoto);
+                ImageController.INSTANCE.SetCurrentFilter(null);
+                LoadImage();
+            }
         }
 
-        private async void SaveImage_Click(object sender, EventArgs e)
+        private void ClickSelectImage(object sender, EventArgs e)
         {
-            saveImageButton.IsEnabled = false;
-
-            if (_cartoonEffect == null)
-            {
-                return;
-            }
-
-            var jpegRenderer = new JpegRenderer(_cartoonEffect);
-
-            // Jpeg renderer gives the raw buffer for the filtered image.
-            IBuffer jpegOutput = await jpegRenderer.RenderAsync();
-
-            // Save the image as a jpeg to the saved pictures album.
-            MediaLibrary library = new MediaLibrary();
-            string fileName = string.Format("CartoonImage_{0:G}", DateTime.Now);
-            var picture = library.SavePicture(fileName, jpegOutput.AsStream());
-
-            MessageBox.Show("Image saved!");
-
-            saveImageButton.IsEnabled = true;
+            OpenImagePicker();
         }
 
-        private async void PickImageCallback(object sender, PhotoResult e)
+        private void ClickSelectEffect(object sender, EventArgs e)
         {
-            if (e.TaskResult != TaskResult.OK || e.ChosenPhoto == null)
+            NavigationService.Navigate(new Uri("/EffectsPage.xaml", UriKind.Relative));
+        }
+
+        private void ClickSaveImage(object sender, EventArgs e)
+        {
+            ImageController.INSTANCE.SaveImage();
+        }
+
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
+            if (ImageManipulator.INSTANCE.sourceStream != null)
             {
-                return;
+                LoadImage();
             }
-
-            try
-            {
-                // Show the thumbnail of the original image.
-                _thumbnailImageBitmap.SetSource(e.ChosenPhoto);
-                _cartoonImageBitmap.SetSource(e.ChosenPhoto);
-                OriginalImage.Source = _thumbnailImageBitmap;
-
-                // Rewind the stream to the start.                     
-                e.ChosenPhoto.Position = 0;
-
-                // A cartoon effect is initialized with  the selected image stream as the source.
-                var imageStream = new StreamImageSource(e.ChosenPhoto);
-                _cartoonEffect = new FilterEffect(imageStream);
-
-                // Add the cartoon filter as the only filter for the effect.
-                var cartoonFilter = new CartoonFilter();
-                _cartoonEffect.Filters = new[] { cartoonFilter };
-
-                // Render the image to a WriteableBitmap.
-                var renderer = new WriteableBitmapRenderer(_cartoonEffect, _cartoonImageBitmap);
-                _cartoonImageBitmap = await renderer.RenderAsync();
-
-                // Set the rendered image as the source for the cartoon image control.
-                CartoonImage.Source = _cartoonImageBitmap;
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show(exception.Message);
-                return;
-            }
-
-            saveImageButton.IsEnabled = true;
         }
     }
 }

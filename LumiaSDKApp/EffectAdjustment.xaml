@@ -1,28 +1,40 @@
 ﻿<phone:PhoneApplicationPage
-    x:Class="LumiaSDKApp.MainPage"
+    x:Class="LumiaSDKApp.EffectAdjustment"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
     shell:SystemTray.IsVisible="True">
 
-    <!--Image-->
-    <Image x:Name="ImageInEdit" Stretch="Uniform"/>
+    
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Image Grid.Row="0" x:Name="ImageInEdit" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Top" />
+       
+        <ListBox
+            Grid.Row="0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            x:Name="FilterControls">            
+        </ListBox>
+        
+    </Grid>
 
     <!--App bar-->
     <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar IsMenuEnabled="True">
-            <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/add.png" IsEnabled="True" Text="Select Image" Click="ClickSelectImage"/>
-            <shell:ApplicationBarIconButton IconUri="/Assets/AppBar1/edit.png" IsEnabled="False" Text="Select Effect" Click="ClickSelectEffect"/>
-            <shell:ApplicationBarIconButton IconUri="/Assets/AppBar2/save.png" IsEnabled="False" Text="Save Image" Click="ClickSaveImage"/>
+        <shell:ApplicationBar IsMenuEnabled="True" >
+            <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/check.png" IsEnabled="True" Text="Finish editing" Click="ClickFinishEditing"/>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
-    
+
 </phone:PhoneApplicationPage>

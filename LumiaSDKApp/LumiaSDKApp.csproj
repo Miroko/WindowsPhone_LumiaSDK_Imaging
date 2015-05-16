@@ -95,6 +95,16 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EffectAdjustment.xaml.cs">
+      <DependentUpon>EffectAdjustment.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Classes\Filter.cs" />
+    <Compile Include="Classes\ImageController.cs" />
+    <Compile Include="EffectsPage.xaml.cs">
+      <DependentUpon>EffectsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Filters\Lomo.cs" />
+    <Compile Include="Classes\ImageManipulator.cs" />
     <Compile Include="LocalizedStrings.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -111,6 +121,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Page Include="EffectAdjustment.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EffectsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -134,6 +152,7 @@
     <Content Include="Assets\AppBar1\edit.png" />
     <Content Include="Assets\AppBar2\save.png" />
     <Content Include="Assets\AppBar\add.png" />
+    <Content Include="Assets\AppBar\check.png" />
     <Content Include="Assets\ApplicationIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -171,6 +190,7 @@
       <HintPath>packages\LumiaImagingSDK.2.0.184\lib\wp8\Lumia.Imaging.Managed.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
