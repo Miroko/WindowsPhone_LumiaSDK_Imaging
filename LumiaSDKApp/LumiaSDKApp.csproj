@@ -103,8 +103,10 @@
     <Compile Include="EffectsPage.xaml.cs">
       <DependentUpon>EffectsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Filters\Contrast.cs" />
     <Compile Include="Filters\Lomo.cs" />
     <Compile Include="Classes\ImageManipulator.cs" />
+    <Compile Include="Filters\TemparatureAndTint.cs" />
     <Compile Include="LocalizedStrings.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>

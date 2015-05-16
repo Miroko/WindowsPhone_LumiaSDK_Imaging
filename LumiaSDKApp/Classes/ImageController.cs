@@ -15,7 +15,9 @@ namespace LumiaSDKApp
         public static ImageController INSTANCE = new ImageController();
 
         private ObservableCollection<Filter> allFilters = new ObservableCollection<Filter>() {
-            new Lomo()
+            new Lomo(),
+            new Contrast(),
+            new TemparatureAndTint()
         };
 
         public bool rendering = false;
