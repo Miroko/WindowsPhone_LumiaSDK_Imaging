@@ -104,6 +104,7 @@
       <DependentUpon>EffectsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Filters\Contrast.cs" />
+    <Compile Include="Filters\HueSaturation.cs" />
     <Compile Include="Filters\Lomo.cs" />
     <Compile Include="Classes\ImageManipulator.cs" />
     <Compile Include="Filters\TemparatureAndTint.cs" />

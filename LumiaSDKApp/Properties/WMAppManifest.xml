@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2014/deployment" AppPlatformVersion="8.1">
   <DefaultLanguage xmlns="" code="en-US" />
-  <App xmlns="" ProductID="{136cdce2-f2b0-4ef5-834c-eebc557bf70c}" Title="Image Manipulator" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="LumiaSDKApp author" Description="Simple image manipulator" SDOptOut="false" BackUpOptOut="false" Publisher="LumiaSDKApp" PublisherID="{1a044c6d-014b-440e-90c0-2695b707232f}">
+  <App xmlns="" ProductID="{136cdce2-f2b0-4ef5-834c-eebc557bf70c}" Title="Photo Filter" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="LumiaSDKApp author" Description="Apply filters to images" SDOptOut="false" BackUpOptOut="false" Publisher="LumiaSDKApp" PublisherID="{1a044c6d-014b-440e-90c0-2695b707232f}">
     <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_NETWORKING" />
@@ -20,7 +20,7 @@
           <SmallImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileSmall.png</SmallImageURI>
           <Count>0</Count>
           <BackgroundImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileMedium.png</BackgroundImageURI>
-          <Title>Image Manipulator</Title>
+          <Title>Photo Filter</Title>
           <BackContent>
           </BackContent>
           <BackBackgroundImageURI>

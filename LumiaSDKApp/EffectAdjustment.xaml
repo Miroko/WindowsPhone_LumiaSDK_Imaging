@@ -12,18 +12,20 @@
     SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d"
     shell:SystemTray.IsVisible="True">
-
     
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Image Grid.Row="0" x:Name="ImageInEdit" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Top" />
+        <TextBlock x:Name="FilterName" Grid.Row="0" Margin="12" FontSize="42"></TextBlock>
+        
+        <Image Grid.Row="1" x:Name="ImageInEdit" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Top" />
        
         <ListBox
-            Grid.Row="1"
+            Grid.Row="2"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             x:Name="FilterControls">            

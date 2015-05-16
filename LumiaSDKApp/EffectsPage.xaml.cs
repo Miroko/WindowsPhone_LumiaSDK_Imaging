@@ -25,11 +25,18 @@ namespace LumiaSDKApp
 
         private void AllFilters_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (AllFilters.SelectedItem == null) return;
+
             // Set selected filter
-            ImageController.INSTANCE.SetCurrentFilter((Filter)AllFilters.SelectedItem);
+            ImageController.INSTANCE.SetCurrentFilter(AllFilters.SelectedItem as Filter);
 
             // Navigate to adjustments
             NavigationService.Navigate(new Uri("/EffectAdjustment.xaml", UriKind.Relative));
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            AllFilters.SelectedItem = null;
         }
 
     }

@@ -17,13 +17,19 @@ namespace LumiaSDKApp
         private ObservableCollection<Filter> allFilters = new ObservableCollection<Filter>() {
             new Lomo(),
             new Contrast(),
-            new TemparatureAndTint()
+            new TemparatureAndTint(),
+            new HueSaturation()
         };
 
         public bool rendering = false;
 
         private Image currentImage = null;
         private Filter currentFilter = null;
+
+        public Filter GetCurrentFilter()
+        {
+            return currentFilter;
+        }
 
         public void SetCurrentImage(Image image)
         {

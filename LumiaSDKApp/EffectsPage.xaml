@@ -22,7 +22,8 @@
             <DataTemplate>
                 <TextBlock
                     Margin="12"
-                    Text="{Binding Name}">                    
+                    Text="{Binding Name}"
+                    FontSize="32">                    
                 </TextBlock>
             </DataTemplate>
         </ListBox.ItemTemplate>
