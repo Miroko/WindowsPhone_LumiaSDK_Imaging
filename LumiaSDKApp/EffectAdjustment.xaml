@@ -20,7 +20,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock x:Name="FilterName" Grid.Row="0" Margin="12" FontSize="42"></TextBlock>
+        <TextBlock x:Name="FilterName" Grid.Row="0" Margin="12" FontSize="32"></TextBlock>
         
         <Image Grid.Row="1" x:Name="ImageInEdit" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Top" />
        

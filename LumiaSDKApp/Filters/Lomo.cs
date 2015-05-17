@@ -109,5 +109,15 @@ namespace LumiaSDKApp.Filters
 
             ImageController.INSTANCE.UpdateImage();
         }
+        public override void RandomValues()
+        {
+            Random r = new Random();
+         
+            filter.LomoVignetting = LomoVignetting.High;
+            filter.LomoStyle = LomoStyle.Blue;
+
+            filter.Saturation = r.NextDouble();
+            filter.Brightness = r.NextDouble();
+        }
     }
 }

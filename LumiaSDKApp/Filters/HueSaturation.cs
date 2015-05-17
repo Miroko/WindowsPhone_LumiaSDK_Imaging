@@ -65,5 +65,13 @@ namespace LumiaSDKApp.Filters
 
             ImageController.INSTANCE.UpdateImage();
         }
+
+        public override void RandomValues()
+        {
+            Random r = new Random();
+            double value = (r.NextDouble() * (double)r.Next(-1, 1));
+            filter.Hue = value;
+            filter.Saturation = value;
+        }
     }
 }

@@ -14,5 +14,6 @@ namespace LumiaSDKApp
 
         public abstract void SetControls(ListBox filterControls);
         public abstract IFilter[] GetFilters();
+        public abstract void RandomValues();
     }
 }

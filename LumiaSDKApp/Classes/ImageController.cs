@@ -21,6 +21,14 @@ namespace LumiaSDKApp
             new HueSaturation()
         };
 
+        public ImageController()
+        {
+            foreach (Filter f in allFilters)
+            {
+                f.RandomValues();
+            }
+        }
+
         public bool rendering = false;
 
         private Image currentImage = null;
