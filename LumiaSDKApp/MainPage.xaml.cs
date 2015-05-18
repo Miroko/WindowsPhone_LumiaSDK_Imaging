@@ -32,6 +32,9 @@ namespace LumiaSDKApp
             selectImageButton = (ApplicationBarIconButton)ApplicationBar.Buttons[0];
             selectEffectButton = (ApplicationBarIconButton)ApplicationBar.Buttons[1];
             saveImageButton = (ApplicationBarIconButton)ApplicationBar.Buttons[2];
+
+            // Pick image
+            OpenImagePicker();
         }
 
         private void LoadImage()
@@ -76,13 +79,14 @@ namespace LumiaSDKApp
             ImageController.INSTANCE.SaveImage();
         }
 
+        private bool ImageSelected()
+        {
+            return ImageManipulator.INSTANCE.sourceStream != null;
+        }
+
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
-            if (ImageManipulator.INSTANCE.sourceStream == null)
-            {
-                OpenImagePicker();
-            }
-            else
+            if (ImageSelected())
             {
                 LoadImage();
             }
