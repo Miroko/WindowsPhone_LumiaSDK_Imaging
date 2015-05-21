@@ -1,4 +1,5 @@
 ﻿using Lumia.Imaging.Adjustments;
+using LumiaSDKApp.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,47 +24,26 @@ namespace LumiaSDKApp.Filters
             return new[] { filter };
         }
 
-        public override void SetControls(ListBox filterControls)
+        private async void saturationSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            TextBlock hue = new TextBlock();
-            hue.Text = "Hue";
-            hue.Margin = new Thickness(12, 0, 0, 0);
-            filterControls.Items.Add(hue);
-            Slider hueSlider = new Slider();
-            hueSlider.Width = 456;
-            hueSlider.Minimum = -1;
-            hueSlider.Maximum = 1;
-            hueSlider.ValueChanged += hueSlider_ValueChanged;
-            filterControls.Items.Add(hueSlider);
+            if (!ImageEditor.INSTANCE.IsRendering())
+            {
+                filter.Saturation = e.NewValue;
 
-            TextBlock saturation = new TextBlock();
-            saturation.Text = "Saturation";
-            saturation.Margin = new Thickness(12, 0, 0, 0);
-            filterControls.Items.Add(saturation);
-            Slider saturationSlider = new Slider();
-            saturationSlider.Width = 456;
-            saturationSlider.Minimum = -1;
-            saturationSlider.Maximum = 1;
-            saturationSlider.ValueChanged += saturationSlider_ValueChanged;
-            filterControls.Items.Add(saturationSlider);
+                await ImageEditor.INSTANCE.RenderImage();
+                ImageEditor.INSTANCE.UpdateImage();
+            }
         }
 
-        void saturationSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private async void hueSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (ImageController.INSTANCE.rendering) return;
+            if (!ImageEditor.INSTANCE.IsRendering())
+            {
+                filter.Hue = e.NewValue;
 
-            filter.Saturation = e.NewValue;
-
-            ImageController.INSTANCE.UpdateImage();
-        }
-
-        void hueSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (ImageController.INSTANCE.rendering) return;
-
-            filter.Hue = e.NewValue;
-
-            ImageController.INSTANCE.UpdateImage();
+                await ImageEditor.INSTANCE.RenderImage();
+                ImageEditor.INSTANCE.UpdateImage();
+            }
         }
 
         public override void RandomValues()
@@ -72,6 +52,31 @@ namespace LumiaSDKApp.Filters
             double value = (r.NextDouble() * (double)r.Next(-1, 1));
             filter.Hue = value;
             filter.Saturation = value;
+        }
+
+        public override void PopulateControls(ListBox listToPopulate)
+        {
+            TextBlock hue = new TextBlock();
+            hue.Text = "Hue";
+            hue.Margin = new Thickness(12, 0, 0, 0);
+            listToPopulate.Items.Add(hue);
+            Slider hueSlider = new Slider();
+            hueSlider.Width = 456;
+            hueSlider.Minimum = -1;
+            hueSlider.Maximum = 1;
+            hueSlider.ValueChanged += hueSlider_ValueChanged;
+            listToPopulate.Items.Add(hueSlider);
+
+            TextBlock saturation = new TextBlock();
+            saturation.Text = "Saturation";
+            saturation.Margin = new Thickness(12, 0, 0, 0);
+            listToPopulate.Items.Add(saturation);
+            Slider saturationSlider = new Slider();
+            saturationSlider.Width = 456;
+            saturationSlider.Minimum = -1;
+            saturationSlider.Maximum = 1;
+            saturationSlider.ValueChanged += saturationSlider_ValueChanged;
+            listToPopulate.Items.Add(saturationSlider);
         }
     }
 }

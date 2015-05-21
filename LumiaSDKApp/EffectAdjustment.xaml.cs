@@ -8,6 +8,7 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using System.Threading.Tasks;
+using LumiaSDKApp.Classes;
 
 namespace LumiaSDKApp
 {
@@ -27,11 +28,12 @@ namespace LumiaSDKApp
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            FilterName.Text = ImageController.INSTANCE.GetCurrentFilter().Name;
+            FilterName.Text = ImageEditor.INSTANCE.filterController.GetCurrentFilter().Name;
+            ImageEditor.INSTANCE.filterController.SetControls(FilterControls); 
 
-            ImageController.INSTANCE.SetCurrentImage(ImageInEdit);
-            ImageController.INSTANCE.SetControls(FilterControls);
-            ImageController.INSTANCE.UpdateImage();
+            ImageEditor.INSTANCE.SetViewImage(ImageInEdit);
+            ImageEditor.INSTANCE.UpdateImage();
+            
         }
     }
 }

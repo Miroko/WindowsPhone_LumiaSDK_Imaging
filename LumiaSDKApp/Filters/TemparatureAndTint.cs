@@ -1,4 +1,5 @@
 ﻿using Lumia.Imaging.Adjustments;
+using LumiaSDKApp.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,47 +24,26 @@ namespace LumiaSDKApp.Filters
             return new[] { filter };
         }
 
-        public override void SetControls(ListBox filterControls)
+        private async void tintSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            TextBlock temperatureLabel = new TextBlock();
-            temperatureLabel.Text = "Temperature";
-            temperatureLabel.Margin = new Thickness(12, 0, 0, 0);
-            filterControls.Items.Add(temperatureLabel);
-            Slider temparatureSlider = new Slider();
-            temparatureSlider.Width = 456;
-            temparatureSlider.Minimum = -1;
-            temparatureSlider.Maximum = 1;
-            temparatureSlider.ValueChanged += temparatureSlider_ValueChanged;
-            filterControls.Items.Add(temparatureSlider);
+            if (!ImageEditor.INSTANCE.IsRendering())
+            {                
+                filter.Tint = e.NewValue;
 
-            TextBlock tintLabel = new TextBlock();
-            tintLabel.Text = "Tint";
-            tintLabel.Margin = new Thickness(12, 0, 0, 0);
-            filterControls.Items.Add(tintLabel);
-            Slider tintSlider = new Slider();
-            tintSlider.Width = 456;
-            tintSlider.Minimum = -1;
-            tintSlider.Maximum = 1;
-            tintSlider.ValueChanged += tintSlider_ValueChanged;
-            filterControls.Items.Add(tintSlider);
+                await ImageEditor.INSTANCE.RenderImage();
+                ImageEditor.INSTANCE.UpdateImage();
+            }
         }
 
-        void tintSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private async void temparatureSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (ImageController.INSTANCE.rendering) return;
+            if (!ImageEditor.INSTANCE.IsRendering())
+            {
+                filter.Temperature = e.NewValue;
 
-            filter.Tint = e.NewValue;
-
-            ImageController.INSTANCE.UpdateImage();
-        }
-
-        void temparatureSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (ImageController.INSTANCE.rendering) return;
-
-            filter.Temperature = e.NewValue;
-
-            ImageController.INSTANCE.UpdateImage();
+                await ImageEditor.INSTANCE.RenderImage();
+                ImageEditor.INSTANCE.UpdateImage();
+            }
         }
 
         public override void RandomValues()
@@ -72,6 +52,31 @@ namespace LumiaSDKApp.Filters
             double value = (r.NextDouble() * (double)r.Next(-1, 1));
             filter.Temperature = value;
             filter.Tint = value;
+        }
+
+        public override void PopulateControls(ListBox listToPopulate)
+        {
+            TextBlock temperatureLabel = new TextBlock();
+            temperatureLabel.Text = "Temperature";
+            temperatureLabel.Margin = new Thickness(12, 0, 0, 0);
+            listToPopulate.Items.Add(temperatureLabel);
+            Slider temparatureSlider = new Slider();
+            temparatureSlider.Width = 456;
+            temparatureSlider.Minimum = -1;
+            temparatureSlider.Maximum = 1;
+            temparatureSlider.ValueChanged += temparatureSlider_ValueChanged;
+            listToPopulate.Items.Add(temparatureSlider);
+
+            TextBlock tintLabel = new TextBlock();
+            tintLabel.Text = "Tint";
+            tintLabel.Margin = new Thickness(12, 0, 0, 0);
+            listToPopulate.Items.Add(tintLabel);
+            Slider tintSlider = new Slider();
+            tintSlider.Width = 456;
+            tintSlider.Minimum = -1;
+            tintSlider.Maximum = 1;
+            tintSlider.ValueChanged += tintSlider_ValueChanged;
+            listToPopulate.Items.Add(tintSlider);
         }
     }
 }

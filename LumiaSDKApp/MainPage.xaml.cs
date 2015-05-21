@@ -15,6 +15,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Diagnostics;
+using LumiaSDKApp.Classes;
 
 namespace LumiaSDKApp
 {
@@ -33,62 +34,45 @@ namespace LumiaSDKApp
             selectEffectButton = (ApplicationBarIconButton)ApplicationBar.Buttons[1];
             saveImageButton = (ApplicationBarIconButton)ApplicationBar.Buttons[2];
 
-            // Pick image
-            OpenImagePicker();
+            // Pick image on start
+            ImageEditor.INSTANCE.PickImage(OnPictureChosen);
         }
 
-        private void LoadImage()
-        {           
-            ImageController.INSTANCE.SetCurrentImage(ImageInEdit);
-            ImageController.INSTANCE.UpdateImage();
-
-            selectEffectButton.IsEnabled = true;
-            saveImageButton.IsEnabled = true;
-        }
-
-        private void OpenImagePicker()
-        {
-            PhotoChooserTask chooser = new PhotoChooserTask();
-            chooser.Completed += OnPictureChosen;
-            chooser.Show();
-        }
-
-        private void OnPictureChosen(object sender, PhotoResult e)
+        private async void OnPictureChosen(object sender, PhotoResult e)
         {
             if (e.TaskResult == TaskResult.OK && e.ChosenPhoto != null)
             {
-                ImageManipulator.INSTANCE.SetSourceStream(e.ChosenPhoto);
-                ImageController.INSTANCE.SetCurrentFilter(null);
-                LoadImage();
+                ImageEditor.INSTANCE.SetImageInEdit(new EditableImage(e.ChosenPhoto));
+                ImageEditor.INSTANCE.SetViewImage(ImageInEdit);
+                await ImageEditor.INSTANCE.RenderImage();
+                ImageEditor.INSTANCE.UpdateImage();
             }
         }
 
         private void ClickSelectImage(object sender, EventArgs e)
         {
-            OpenImagePicker();
+            ImageEditor.INSTANCE.PickImage(OnPictureChosen);
         }
 
         private void ClickSelectEffect(object sender, EventArgs e)
         {
-            //NavigationService.Navigate(new Uri("/EffectsPage.xaml", UriKind.Relative));
             NavigationService.Navigate(new Uri("/FilterSelectionPage.xaml", UriKind.Relative));
         }
 
         private void ClickSaveImage(object sender, EventArgs e)
         {
-            ImageController.INSTANCE.SaveImage();
-        }
-
-        private bool ImageSelected()
-        {
-            return ImageManipulator.INSTANCE.sourceStream != null;
+            ImageEditor.INSTANCE.SaveImage();
         }
 
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
-            if (ImageSelected())
+            if (ImageEditor.INSTANCE.GetImageInEdit() != null)
             {
-                LoadImage();
+                ImageEditor.INSTANCE.SetViewImage(ImageInEdit);
+                ImageEditor.INSTANCE.UpdateImage();
+
+                selectEffectButton.IsEnabled = true;
+                saveImageButton.IsEnabled = true;
             }
         }
     }

@@ -19,34 +19,7 @@ namespace LumiaSDKApp
         {
             InitializeComponent();
 
-            PopulateFiltersList();
-
-        }
-
-        private async void PopulateFiltersList()
-        {
-            foreach (Filter filter in ImageController.INSTANCE.GetAllFilters())
-            {
-                ListBoxItem item = new ListBoxItem();
-
-                TextBlock label = new TextBlock();
-                label.FontSize = 32;
-                label.Text = filter.Name;
-                label.Margin = new Thickness(12);
-
-                Image img = new Image();
-                EditableImage editableImage1 = new EditableImage(img, ImageManipulator.INSTANCE.sourceStream);
-                editableImage1.SetFilter(filter);
-                await editableImage1.Render();
-
-                StackPanel stack = new StackPanel();
-                stack.Children.Add(label);
-                stack.Children.Add(img);
-
-                item.Content = stack;
-
-                AllFilters.Items.Add(item);
-            }
+            ImageEditor.INSTANCE.filterList.PopulateFiltersList(AllFilters);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -54,15 +27,15 @@ namespace LumiaSDKApp
             AllFilters.SelectedIndex = -1;
         }
 
-        private void AllFilters_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void AllFilters_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Object selection = AllFilters.SelectedItem;
             if (selection != null)
             {
-                // Set selected filter
-                ImageController.INSTANCE.SetCurrentFilter(ImageController.INSTANCE.GetAllFilters()[AllFilters.SelectedIndex]);
+                // Render selected filter
+                ImageEditor.INSTANCE.filterController.SetCurrentFilter(ImageEditor.INSTANCE.filterList.filters[AllFilters.SelectedIndex]);
+                await ImageEditor.INSTANCE.RenderImage();
 
-                // Navigate to adjustments
                 NavigationService.Navigate(new Uri("/EffectAdjustment.xaml", UriKind.Relative));
             }
         }

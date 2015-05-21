@@ -1,4 +1,5 @@
 ﻿using Lumia.Imaging;
+using LumiaSDKApp.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,9 @@ namespace LumiaSDKApp
     abstract class Filter
     {
         public abstract String Name { get; }
-
-        public abstract void SetControls(ListBox filterControls);
         public abstract IFilter[] GetFilters();
         public abstract void RandomValues();
+
+        public abstract void PopulateControls(ListBox listToPopulate);
     }
 }

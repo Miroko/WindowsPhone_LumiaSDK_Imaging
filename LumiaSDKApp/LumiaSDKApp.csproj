@@ -96,22 +96,19 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\EditableImage.cs" />
+    <Compile Include="Classes\FilterController.cs" />
+    <Compile Include="Classes\FilterList.cs" />
     <Compile Include="Classes\ImageEditor.cs" />
     <Compile Include="EffectAdjustment.xaml.cs">
       <DependentUpon>EffectAdjustment.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\Filter.cs" />
-    <Compile Include="Classes\ImageController.cs" />
-    <Compile Include="EffectsPage.xaml.cs">
-      <DependentUpon>EffectsPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="FilterSelectionPage.xaml.cs">
       <DependentUpon>FilterSelectionPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Filters\Contrast.cs" />
     <Compile Include="Filters\HueSaturation.cs" />
     <Compile Include="Filters\Lomo.cs" />
-    <Compile Include="Classes\ImageManipulator.cs" />
     <Compile Include="Filters\TemparatureAndTint.cs" />
     <Compile Include="LocalizedStrings.cs" />
     <Compile Include="MainPage.xaml.cs">
@@ -130,10 +127,6 @@
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
     <Page Include="EffectAdjustment.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="EffectsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

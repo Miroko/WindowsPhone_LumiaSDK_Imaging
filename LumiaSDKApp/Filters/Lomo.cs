@@ -1,5 +1,6 @@
 ﻿using Lumia.Imaging;
 using Lumia.Imaging.Artistic;
+using LumiaSDKApp.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,90 +25,59 @@ namespace LumiaSDKApp.Filters
             return new[] { filter };
         }
 
-        public override void SetControls(ListBox filterControls)
+        private async void vignettiSlider_ValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
         {
-            TextBlock brightnessLabel = new TextBlock();
-            brightnessLabel.Text = "Brightness";
-            brightnessLabel.Margin = new Thickness(12, 0, 0, 0);
-            filterControls.Items.Add(brightnessLabel);
-            Slider brightnessSlider = new Slider();
-            brightnessSlider.Width = 456;
-            brightnessSlider.Minimum = 0;
-            brightnessSlider.Maximum = 1;
-            brightnessSlider.ValueChanged += brightnessSlider_ValueChanged;
-            filterControls.Items.Add(brightnessSlider);
-
-            TextBlock styleLabel = new TextBlock();
-            styleLabel.Text = "Style";
-            styleLabel.Margin = new Thickness(12, 0, 0, 0);
-            filterControls.Items.Add(styleLabel);
-            Slider styleSlider = new Slider();
-            styleSlider.Width = 456;
-            styleSlider.Minimum = 0;
-            styleSlider.Maximum = 4;
-            styleSlider.ValueChanged += styleSlider_ValueChanged;
-            filterControls.Items.Add(styleSlider);
-
-            TextBlock vignettiLabel = new TextBlock();
-            vignettiLabel.Text = "Vignetting";
-            vignettiLabel.Margin = new Thickness(12, 0, 0, 0);
-            filterControls.Items.Add(vignettiLabel);
-            Slider vignettiSlider = new Slider();
-            vignettiSlider.Width = 456;
-            vignettiSlider.Minimum = 0;
-            vignettiSlider.Maximum = 2;
-            vignettiSlider.ValueChanged += vignettiSlider_ValueChanged;
-            filterControls.Items.Add(vignettiSlider); 
-            
-        }
-
-        void vignettiSlider_ValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (ImageController.INSTANCE.rendering) return;
-
-            int newValue = (int)e.NewValue;
-            switch (newValue)
+            if (!ImageEditor.INSTANCE.IsRendering())
             {
-                case 0: filter.LomoVignetting = LomoVignetting.Low;
-                    break;
-                case 1: filter.LomoVignetting = LomoVignetting.Medium;
-                    break;
-                case 2: filter.LomoVignetting = LomoVignetting.High;
-                    break;
+                int newValue = (int)e.NewValue;
+                switch (newValue)
+                {
+                    case 0: filter.LomoVignetting = LomoVignetting.Low;
+                        break;
+                    case 1: filter.LomoVignetting = LomoVignetting.Medium;
+                        break;
+                    case 2: filter.LomoVignetting = LomoVignetting.High;
+                        break;
+                }
+
+                await ImageEditor.INSTANCE.RenderImage();
+                ImageEditor.INSTANCE.UpdateImage();
             }
-
-            ImageController.INSTANCE.UpdateImage();
         }
 
-        private void brightnessSlider_ValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
+        private async void brightnessSlider_ValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
         {
-            if (ImageController.INSTANCE.rendering) return;
-
-            filter.Brightness = e.NewValue;
-
-            ImageController.INSTANCE.UpdateImage();
-        }
-
-        private void styleSlider_ValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (ImageController.INSTANCE.rendering) return;
-
-            int newValue = (int)e.NewValue;
-            switch (newValue)
+            if (!ImageEditor.INSTANCE.IsRendering())
             {
-                case 0: filter.LomoStyle = LomoStyle.Blue;
-                    break;
-                case 1: filter.LomoStyle = LomoStyle.Green;
-                    break;
-                case 2: filter.LomoStyle = LomoStyle.Neutral;
-                    break;
-                case 3: filter.LomoStyle = LomoStyle.Red;
-                    break;
-                case 4: filter.LomoStyle = LomoStyle.Yellow;
-                    break;
-            }
+                filter.Brightness = e.NewValue;
 
-            ImageController.INSTANCE.UpdateImage();
+                await ImageEditor.INSTANCE.RenderImage();
+                ImageEditor.INSTANCE.UpdateImage();
+            }
+        }
+
+        private async void styleSlider_ValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (!ImageEditor.INSTANCE.IsRendering())
+            {
+                int newValue = (int)e.NewValue;
+                switch (newValue)
+                {
+                    case 0: filter.LomoStyle = LomoStyle.Blue;
+                        break;
+                    case 1: filter.LomoStyle = LomoStyle.Green;
+                        break;
+                    case 2: filter.LomoStyle = LomoStyle.Neutral;
+                        break;
+                    case 3: filter.LomoStyle = LomoStyle.Red;
+                        break;
+                    case 4: filter.LomoStyle = LomoStyle.Yellow;
+                        break;
+                }
+
+                await ImageEditor.INSTANCE.RenderImage();
+                ImageEditor.INSTANCE.UpdateImage();
+            }
         }
         public override void RandomValues()
         {
@@ -118,6 +88,42 @@ namespace LumiaSDKApp.Filters
 
             filter.Saturation = r.NextDouble();
             filter.Brightness = r.NextDouble();
+        }
+
+        public override void PopulateControls(ListBox listToPopulate)
+        {
+            TextBlock brightnessLabel = new TextBlock();
+            brightnessLabel.Text = "Brightness";
+            brightnessLabel.Margin = new Thickness(12, 0, 0, 0);
+            listToPopulate.Items.Add(brightnessLabel);
+            Slider brightnessSlider = new Slider();
+            brightnessSlider.Width = 456;
+            brightnessSlider.Minimum = 0;
+            brightnessSlider.Maximum = 1;
+            brightnessSlider.ValueChanged += brightnessSlider_ValueChanged;
+            listToPopulate.Items.Add(brightnessSlider);
+
+            TextBlock styleLabel = new TextBlock();
+            styleLabel.Text = "Style";
+            styleLabel.Margin = new Thickness(12, 0, 0, 0);
+            listToPopulate.Items.Add(styleLabel);
+            Slider styleSlider = new Slider();
+            styleSlider.Width = 456;
+            styleSlider.Minimum = 0;
+            styleSlider.Maximum = 4;
+            styleSlider.ValueChanged += styleSlider_ValueChanged;
+            listToPopulate.Items.Add(styleSlider);
+
+            TextBlock vignettiLabel = new TextBlock();
+            vignettiLabel.Text = "Vignetting";
+            vignettiLabel.Margin = new Thickness(12, 0, 0, 0);
+            listToPopulate.Items.Add(vignettiLabel);
+            Slider vignettiSlider = new Slider();
+            vignettiSlider.Width = 456;
+            vignettiSlider.Minimum = 0;
+            vignettiSlider.Maximum = 2;
+            vignettiSlider.ValueChanged += vignettiSlider_ValueChanged;
+            listToPopulate.Items.Add(vignettiSlider); 
         }
     }
 }
